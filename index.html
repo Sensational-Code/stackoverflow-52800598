@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/iamdustan-smoothscroll/0.4.0/smoothscroll.min.js"></script>
+	<style type="text/css">
+		#container {
+			height: 1500px;
+			width: 1500px;
+			display: grid;
+			grid-gap: 500px;
+			background: red; /* For browsers that do not support gradients */
+			background: -webkit-linear-gradient(#eee, orange); /* For Safari 5.1 to 6.0 */
+			background: -o-linear-gradient(#eee, orange); /* For Opera 11.1 to 12.0 */
+			background: -moz-linear-gradient(#eee, orange); /* For Firefox 3.6 to 15 */
+			background: linear-gradient(#eee, orange); /* Standard syntax */
+		}
+
+		#one, #two, #three {
+			height: 100px;
+			width: 100px;
+			text-align: center;
+			background: #fff;
+			padding: 10px;
+			margin: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id=container>
+		<div id="one">
+				<h1>one</h1>
+				
+				<a href="#one">one</a>
+				<a href="#two">two</a>
+				<a href="#three">three</a>
+		</div>
+		<div id="two">
+				<h1>two</h1>
+				
+				<a href="#one">one</a>
+				<a href="#two">two</a>
+				<a href="#three">three</a>
+		</div>
+		<div id="three">
+				<h1>three</h1>
+				
+				<a href="#one">one</a>
+				<a href="#two">two</a>
+				<a href="#three">three</a>
+		</div>
+</div>
+<script type="text/javascript">
+	function anchorLinkHandler(e) {
+		const distanceToTop = el => Math.floor(el.getBoundingClientRect().top);
+
+		e.preventDefault();
+		const targetID = this.getAttribute("href");
+		const targetAnchor = document.querySelector(targetID);
+		if (!targetAnchor) return;
+		const originalTop = distanceToTop(targetAnchor);
+
+		window.scrollBy({ top: originalTop, left: 0, behavior: "smooth" });
+
+		const checkIfDone = setInterval(function() {
+				const atBottom = window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 2;
+				if (distanceToTop(targetAnchor) === 0 || atBottom) {
+						targetAnchor.tabIndex = "-1";
+						targetAnchor.focus();
+						window.history.pushState("", "", targetID);
+						clearInterval(checkIfDone);
+				}
+		}, 100);
+}
+
+const linksToAnchors = document.querySelectorAll('a[href^="#"]');
+
+linksToAnchors.forEach(each => (each.onclick = anchorLinkHandler));
+
+// it could probably work in two dimensions too... that'd be kinda cool.
+</script>
+</body>
+</html>
